@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using backend.Domain.Interfaces;
+using backend.Domain.Interfaces; 
 
 namespace backend.Application.Services
 {
@@ -18,6 +18,11 @@ namespace backend.Application.Services
                 imageFile.CopyTo(memoryStream);
                 return memoryStream.ToArray();
             }
+        }
+
+        public string? ConvertToString(byte[]? imageFile)
+        {
+            return imageFile != null ? $"data:image/png;base64,{Convert.ToBase64String(imageFile)}" : null;
         }
     }
 }

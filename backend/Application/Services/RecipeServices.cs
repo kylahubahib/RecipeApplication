@@ -7,7 +7,7 @@ using backend.Application.DTOs;
 using backend.Domain.Interfaces;
 using backend.Domain.Models;
 using backend.Infrastructure.Context;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc; 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -29,18 +29,19 @@ namespace backend.Application.Services
 
          public async Task<IEnumerable<DisplayRecipeDto>> GetAllAsync()
         {
+
             return await _db.Recipes
-                .Include(r => r.Creator)
+                .Include(r => r.Category)
                 .Select(r => new DisplayRecipeDto
                 {
                     RecipeId = r.RecipeId,
-                    CreatorId = r.CreatorId,
+                    CategoryId = r.CategoryId,
                     Title = r.Title,
                     Description = r.Description,
                     Instruction = r.Instruction,
-                    Image = r.Image,
+                    Image = _convert.ConvertToString(r.Image),
                     CreatedAt = r.CreatedAt,
-                    FullName = r.Creator != null ? r.Creator.Name : "Anonymous"
+                    CategoryName = r.Category != null ? r.Category.CategoryName : "Anonymous"
                 })
             .ToListAsync();
         }
@@ -48,33 +49,33 @@ namespace backend.Application.Services
         public async Task<DisplayRecipeDto?> GetRecipeAsync(int id)
         {
             return await _db.Recipes
-                .Include(r => r.Creator)
+                .Include(r => r.Category)
                 .Where(r => r.RecipeId == id)
                 .Select(r => new DisplayRecipeDto
                 {
                     RecipeId = r.RecipeId,
-                    CreatorId = r.CreatorId,
+                    CategoryId = r.CategoryId,
                     Title = r.Title,
                     Description = r.Description,
                     Instruction = r.Instruction,
-                    Image = r.Image,
+                    Image = _convert.ConvertToString(r.Image),
                     CreatedAt = r.CreatedAt,
-                    FullName = r.Creator != null ? r.Creator.Name : "Anonymous"
+                    CategoryName = r.Category != null ? r.Category.CategoryName : "Anonymous"
                 })
             .FirstOrDefaultAsync();
         }
-        public async Task<Recipe> Create(RecipeDto data)
+        public async Task<Recipe> Create(CreateRecipeDto data)
         {
-            
+            var img = _convert.ConvertToBytes(data.Image);
 
             var newRecipe = new Recipe
             {
                 RecipeId = data.RecipeId,
-                CreatorId = data.CreatorId,
+                CategoryId = data.CategoryId,
                 Title = data.Title,
                 Description = data.Description,
                 Instruction = data.Instruction,
-                Image = data.Image,
+                Image = img,
                 CreatedAt = data.CreatedAt,
             };
             

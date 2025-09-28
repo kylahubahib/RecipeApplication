@@ -15,7 +15,7 @@ import { api } from "../../services/api";
 
 export default function CreateRecipe({fetchRecipe}) {
   const [open, setOpen] = useState(false);
-  const [formData, setFormData] = useState({
+  const [inputData, setInputData] = useState({
     title: "",
     description: "",
     instruction: "",
@@ -27,9 +27,18 @@ export default function CreateRecipe({fetchRecipe}) {
     setOpen(!open);
   }
   
-  console.log(formData);
+  // console.log(inputData);
 
   async function submitRecipe() {
+    const formData = new FormData();
+    formData.append("Title", inputData.title);
+    formData.append("Description", inputData.description ?? "");
+    formData.append("Instruction", inputData.instruction);
+    if (inputData.image) {
+      formData.append("Image", inputData.image); 
+    }
+    formData.append("Name", inputData.fullName);
+
     try {
         const res = await api.createRecipe(formData);
         if(res) {
@@ -38,7 +47,7 @@ export default function CreateRecipe({fetchRecipe}) {
           fetchRecipe();
         }
     } catch(err) {
-      alert(err);
+        alert("An unexpected error occurred");
     }
   }
 
@@ -88,8 +97,8 @@ export default function CreateRecipe({fetchRecipe}) {
                         labelName={"Title"} 
                         placeHolder={"Enter title..."} 
                         type="text"
-                        onChange={(e) => setFormData({...formData, title: e.target.value})}
-                        required
+                        onChange={(e) => setInputData({...inputData, title: e.target.value})}
+                        req={true}
                     />
                 </div>
                 <div>
@@ -97,7 +106,7 @@ export default function CreateRecipe({fetchRecipe}) {
                         labelName={"Description"} 
                         placeHolder={"Enter Description..."} 
                         type="text"
-                        onChange={(e) => setFormData({...formData, description: e.target.value})}
+                        onChange={(e) => setInputData({...inputData, description: e.target.value})}
                     />
                 </div>
                 <div>
@@ -105,15 +114,15 @@ export default function CreateRecipe({fetchRecipe}) {
                         labelName={"Instructions"} 
                         placeHolder={"Provide instructions"} 
                         rows={4}
-                        onChange={(e) => setFormData({...formData, instruction: e.target.value})}
-                        required
+                        onChange={(e) => setInputData({...inputData, instruction: e.target.value})}
+                        req={true}
                     />
                 </div>
                 <div>
                     <InputGroup 
                         labelName={"Upload image"} 
                         type="file"
-                        onChange={(e) => setFormData({...formData, image: e.target.files[0]})}
+                        onChange={(e) => setInputData({...inputData, image: e.target.files[0]})}
                         accept="image/*"
                     />
                 </div>
@@ -122,7 +131,7 @@ export default function CreateRecipe({fetchRecipe}) {
                         labelName={"Creator"} 
                         placeHolder={"Enter creator name..."} 
                         type="text"
-                        onChange={(e) => setFormData({...formData, fullName: e.target.value})}
+                        onChange={(e) => setInputData({...inputData, fullName: e.target.value})}
                     />
                 </div>
               </div>

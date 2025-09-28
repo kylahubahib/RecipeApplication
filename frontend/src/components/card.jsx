@@ -1,15 +1,19 @@
-export default function RecipeCard({title, desc, img, name}) {
+import { Link } from "react-router-dom";
+
+export default function RecipeCard({title, desc, img, name, id}) {
 
 return (
-    <div className=" bg-white shadow-sm  rounded-lg m-5">
-        {/* Image here */}
-        <div className="bg-gray-300 h-40 rounded-t-lg">
+   
+<Link to={`/recipe/${id}`} className="bg-white shadow-sm rounded-lg w-full flex flex-col overflow-hidden">
+  <img className="w-full h-50 rounded-t-lg object-cover" src={img == null ? "/bg-food.png" : img} alt={title}/>
 
-        </div>
-        <div className="p-2 space-y-2 flex flex-col sm:h-30 lg:h-30">
-            <label className="font-bold text-gray-900 text-2xl">{title}</label>
-            <label className="text-gray-700 text-sm"><b>Description:</b> {desc}</label>
-            <label  className="text-gray-700 text-sm">Created By: {name}</label>
-        </div>
-    </div>
+  <div className="p-2 flex flex-col space-y-2 min-w-0">
+    <label className="font-bold text-gray-900 text-2xl">{title}</label>
+    <p className="text-gray-700 text-sm truncate whitespace-nowrap overflow-hidden min-w-0"><b>Description:</b> {desc}</p>
+    <label className="text-gray-700 text-sm">Created By: {name}</label>
+  </div>
+
+</Link>
+
+   
 )}

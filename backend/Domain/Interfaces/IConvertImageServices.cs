@@ -8,5 +8,6 @@ namespace backend.Domain.Interfaces
     public interface IConvertImageServices
     {
         byte[]? ConvertToBytes(IFormFile? imageFile);
+        string? ConvertToString(byte[]? imageFile);
     }
 }

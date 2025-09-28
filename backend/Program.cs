@@ -15,6 +15,7 @@ builder.Services.AddSwaggerGen();
 
 // Whenever a class asks for IRecipeServices, provide an instance of RecipeServices.
 builder.Services.AddScoped<IRecipeServices, RecipeServices>();
+builder.Services.AddScoped<ICategoryServices, CategoryServices>();
 builder.Services.AddScoped<IConvertImageServices, ConvertImageServices>();
 
 

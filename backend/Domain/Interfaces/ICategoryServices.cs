@@ -8,12 +8,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Domain.Interfaces
 {
-    public interface IRecipeServices
+    public interface ICategoryServices
     {
-        Task<IEnumerable<DisplayRecipeDto>> GetAllAsync();
-        Task<DisplayRecipeDto?> GetRecipeAsync(int id);
-        Task<Recipe> Create(CreateRecipeDto data);
-        Task<bool> Update(RecipeDto dto, int id);
+        Task<IEnumerable<Category>> GetAllAsync();
+        Task<Category?> GetCategoryAsync(int id);
+        Task<Category> Create(Category data);
+        Task<bool> Update(Category dto, int id);
         Task<bool> Delete(int id);
     }
 }

@@ -14,44 +14,44 @@ namespace backend.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class RecipeController : ControllerBase
+    public class CategoryController : ControllerBase
     {
-        private readonly ILogger<RecipeController> _logger;
-        private readonly IRecipeServices _service;
+        private readonly ILogger<CategoryController> _logger;
+        private readonly ICategoryServices _service;
 
-        public RecipeController( ILogger<RecipeController> logger, IRecipeServices service)
+        public CategoryController( ILogger<CategoryController> logger, ICategoryServices service)
         {
             _service = service;
             _logger = logger;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<DisplayRecipeDto>>> GetAllAsync()
+        public async Task<ActionResult<IEnumerable<Category>>> GetAllAsync()
         {
-            var recipes = await _service.GetAllAsync();
+            var categories = await _service.GetAllAsync();
 
-            _logger.LogInformation("Fetch Recipes: " + recipes);
+            _logger.LogInformation("Fetch Recipes: " + categories);
 
-            return Ok(recipes);
+            return Ok(categories);
         }
 
         [HttpGet("{id:int}")]
-        public async Task<ActionResult<IEnumerable<DisplayRecipeDto>>> GetById(int id)
+        public async Task<ActionResult<IEnumerable<Category>>> GetById(int id)
         {
-            var recipe = await _service.GetRecipeAsync(id);
-            return (recipe == null) ? NotFound() : Ok(recipe);
+            var category = await _service.GetCategoryAsync(id);
+            return (category == null) ? NotFound() : Ok(category);
         }
 
         [HttpPost]
-        public async Task<ActionResult<RecipeDto>> CreateAsync(CreateRecipeDto data)
+        public async Task<ActionResult<Category>> CreateAsync(Category data)
         {
             //Add validations here
-            var recipe = await _service.Create(data);
-            return CreatedAtAction(nameof(GetById), new { id = recipe.RecipeId }, recipe);
+            var category = await _service.Create(data);
+            return CreatedAtAction(nameof(GetById), new { id = category.CategoryId }, category);
         }
 
         [HttpPut("{id:int}")]
-        public async Task<IActionResult> UpdateAsync(RecipeDto data, int id)
+        public async Task<IActionResult> UpdateAsync(Category data, int id)
         {
             var success = await _service.Update(data, id);
             return success ? NoContent() : NotFound();

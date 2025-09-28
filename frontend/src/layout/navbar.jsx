@@ -1,6 +1,8 @@
 import Button from "../components/button";
 import CreateRecipe from "../components/recipes/create-recipe";
 import SearchBar from "../components/searchbar";
+import CategoryModal from "../pages/category";
+
 
 export default function NavigationBar({onRecipeCreated}) {
 
@@ -10,11 +12,12 @@ return (
 <nav className="bg-[#FE5D26] relative w-full border-b border-gray-200">
   <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
 
-  <div className="flex items-center space-x-3 rtl:space-x-reverse">
+  {/* <div className="flex items-center space-x-3 rtl:space-x-reverse">
       <SearchBar />
-  </div>
+  </div> */}
 
-  <div className="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
+  <div className="flex md:order-2 md:space-x-3 rtl:space-x-reverse">
+      <CategoryModal />
       <CreateRecipe fetchRecipe={onRecipeCreated}/>
       {/* <Button title={"Create Recipe"} className=" bg-[#F2C078] hover:bg-[#E6B85A]"/> */}
   </div>

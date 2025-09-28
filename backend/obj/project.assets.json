@@ -5177,31 +5177,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\TRAINEE-HUBAHIB\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\third\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\TRAINEE-HUBAHIB\\OneDrive - N-PAX\\Documents\\Training\\Practice\\RecipeApplication\\backend\\backend.csproj",
+      "projectUniqueName": "C:\\Users\\third\\OneDrive\\Documents\\Kyla\\project\\fullstack\\RecipeApplication\\backend\\backend.csproj",
       "projectName": "backend",
-      "projectPath": "C:\\Users\\TRAINEE-HUBAHIB\\OneDrive - N-PAX\\Documents\\Training\\Practice\\RecipeApplication\\backend\\backend.csproj",
-      "packagesPath": "C:\\Users\\TRAINEE-HUBAHIB\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\TRAINEE-HUBAHIB\\OneDrive - N-PAX\\Documents\\Training\\Practice\\RecipeApplication\\backend\\obj\\",
+      "projectPath": "C:\\Users\\third\\OneDrive\\Documents\\Kyla\\project\\fullstack\\RecipeApplication\\backend\\backend.csproj",
+      "packagesPath": "C:\\Users\\third\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\third\\OneDrive\\Documents\\Kyla\\project\\fullstack\\RecipeApplication\\backend\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
-        "C:\\Users\\TRAINEE-HUBAHIB\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "C:\\Users\\third\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net9.0"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -5264,7 +5257,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.302/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

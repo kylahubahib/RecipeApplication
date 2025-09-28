@@ -9,37 +9,37 @@ using Microsoft.EntityFrameworkCore;
 
 namespace backend.Application.Services
 {
-    public class CreatorServices
+    public class CategoryServices : ICategoryServices
     {
         private readonly AppDbContext _db;
-        private readonly ILogger<CreatorServices> _logger;
+        private readonly ILogger<CategoryServices> _logger;
 
-        public CreatorServices(AppDbContext db, ILogger<CreatorServices> logger)
+        public CategoryServices(AppDbContext db, ILogger<CategoryServices> logger)
         {
             _db = db;
             _logger = logger;
         }
 
-        public async Task<IEnumerable<Creator>> GetAllAsync()
+        public async Task<IEnumerable<Category>> GetAllAsync()
         {
-            return await _db.Creators.ToListAsync();
+            return await _db.Categories.ToListAsync();
         }
         
-        public async Task<Creator?> GetRecipeAsync(int id)
+        public async Task<Category?> GetCategoryAsync(int id)
         {
-            return await _db.Creators.FindAsync(id);
+            return await _db.Categories.FindAsync(id);
         }
-        public async Task<Creator> Create(Creator data)
+        public async Task<Category> Create(Category data)
         {
-            await _db.Creators.AddAsync(data);
+            await _db.Categories.AddAsync(data);
             await _db.SaveChangesAsync();
 
             return data;
         }
 
-        public async Task<bool> Update(Creator dto, int id)
+        public async Task<bool> Update(Category dto, int id)
         {
-            var exists = await _db.Creators.AnyAsync(t => t.CreatorId == id);
+            var exists = await _db.Categories.AnyAsync(t => t.CategoryId == id);
             if (!exists) return false;
 
             _db.Entry(dto).State = EntityState.Modified;
@@ -50,10 +50,10 @@ namespace backend.Application.Services
         
         public async Task<bool> Delete(int id)
         {
-            var item = await _db.Creators.FindAsync(id);
+            var item = await _db.Categories.FindAsync(id);
             if (item == null) return false;
 
-            _db.Creators.Remove(item);
+            _db.Categories.Remove(item);
             await _db.SaveChangesAsync();
 
             return true;
