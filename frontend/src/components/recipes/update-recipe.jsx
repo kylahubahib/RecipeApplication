@@ -7,6 +7,7 @@ import CategoryDropdown from "../dropdown";
 
 export default function UpdateRecipe({fetchRecipe, recipe}) {
   const [open, setOpen] = useState(false);
+  const [updatedImage, setUpdatedImage] = useState("");
   const [inputData, setInputData] = useState({
     title: "",
     description: "",
@@ -15,14 +16,14 @@ export default function UpdateRecipe({fetchRecipe, recipe}) {
     category: ""
   })
 
-  function toggleModal() {
+  function toggleModal() { 
     setOpen(!open);
   }
 
-  console.log(inputData);
 
-  function handleCategoryChange() {
-
+  function handleCategoryChange(id) {
+    setInputData({...inputData, category : id});
+    console.log(id);
   }
 
    useEffect(() => {
@@ -32,7 +33,7 @@ export default function UpdateRecipe({fetchRecipe, recipe}) {
         description: recipe.description || "",
         instruction: recipe.instruction || "",
         image: recipe.image || "",
-        category: recipe.categoryName || ""
+        category: recipe.categoryId || ""
       });
     }
   }, [recipe]);
@@ -63,7 +64,7 @@ export default function UpdateRecipe({fetchRecipe, recipe}) {
               {/* Modal header */}
               <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t border-gray-200">
                 <h3 className="text-xl font-semibold text-gray-900">
-                  Create New Recipe
+                  Update Recipe
                 </h3>
                 <button
                   type="button"
@@ -107,17 +108,25 @@ export default function UpdateRecipe({fetchRecipe, recipe}) {
                         value={inputData.instruction}
                     />
                 </div>
-                <div>
-                    {/* Preview here */}
-                    <InputGroup 
-                        labelName={"Upload image"} 
+                <div className="flex space-x-7 mt-8">
+                     {inputData.image != null && <div className="w-40 h-40">
+                        <img 
+                          className="w-40 h-40 object-cover rounded-md" 
+                          src={inputData.image} 
+                          alt={inputData.title} 
+                        />
+                    </div>}
+                    <div>
+                      <InputGroup 
+                        labelName={"Upload New Image"} 
                         type="file"
                         onChange={(e) => setInputData({...inputData, image: e.target.files[0]})}
                         accept="image/*"
-                    />
+                      />
+                    </div>
                 </div>
                 <div>
-                   <CategoryDropdown handleCategory={handleCategoryChange}/>
+                   <CategoryDropdown handleCategory={handleCategoryChange} selectedId={inputData.category}/>
                 </div>
               </div>
 

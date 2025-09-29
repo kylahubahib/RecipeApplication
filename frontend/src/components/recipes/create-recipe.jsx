@@ -30,7 +30,7 @@ export default function CreateRecipe({fetchRecipe}) {
   }
 
   function handleCategoryChange(id) {
-    setInputData({...inputData, categoryId : id})
+    setInputData({...inputData, categoryId : id});
   }
   
 
