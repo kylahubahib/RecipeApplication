@@ -3,54 +3,40 @@ import Button from "../button";
 import InputGroup from "../input";
 import TextAreaGroup from "../text-area";
 import { api } from "../../services/api";
-
-//  "recipeId": 4,
-//         "creatorId": 1,
-//         "title": "Spaghetti Carbonara",
-//         "description": "Classic Italian pasta with creamy sauce and pancetta.",
-//         "instruction": "Boil pasta, cook pancetta, mix with eggs and cheese.",
-//         "image": null,
-//         "createdAt": "2025-09-23T10:00:00",
-//         "fullName": "Sharon Cuneta"
+import CategoryDropdown from "../dropdown";
 
 export default function UpdateRecipe({fetchRecipe, recipe}) {
   const [open, setOpen] = useState(false);
   const [inputData, setInputData] = useState({
-    title: recipe.title,
-    description: recipe.description,
-    instruction: recipe.instruction,
-    image: recipe.image,
-    category: recipe.categoryName
+    title: "",
+    description: "",
+    instruction: "",
+    image: "",
+    category: ""
   })
 
   function toggleModal() {
     setOpen(!open);
   }
-  
+
   console.log(inputData);
 
-  async function submitRecipe() {
-    const formData = new FormData();
-    formData.append("Title", inputData.title);
-    formData.append("Description", inputData.description ?? "");
-    formData.append("Instruction", inputData.instruction);
-    if (inputData.image) {
-      formData.append("Image", inputData.image); 
-    }
-    formData.append("Name", inputData.fullName);
-   
+  function handleCategoryChange() {
 
-    try {
-        const res = await api.createRecipe(formData);
-        if(res) {
-          setOpen(false);
-          alert("Successfully added recipe!");
-          fetchRecipe();
-        }
-    } catch(err) {
-      alert(err);
-    }
   }
+
+   useEffect(() => {
+    if (recipe) {
+      setInputData({
+        title: recipe.title || "",
+        description: recipe.description || "",
+        instruction: recipe.instruction || "",
+        image: recipe.image || "",
+        category: recipe.categoryName || ""
+      });
+    }
+  }, [recipe]);
+  
 
   // Prevent body scroll when modal is open
   useEffect(() => {
@@ -68,7 +54,7 @@ export default function UpdateRecipe({fetchRecipe, recipe}) {
   return (
     <>
       {/* Open modal button */}
-      <Button title={"Create Recipe"}  onClick={toggleModal} className=" bg-[#F2C078] hover:bg-[#E6B85A]"/>
+      <Button title={"Edit"}  onClick={toggleModal} className=" bg-[#F2C078] hover:bg-[#E6B85A]"/>
 
       {open && (
         <div className="fixed overflow-auto inset-0 z-50 flex justify-center items-center bg-black/50">
@@ -99,7 +85,8 @@ export default function UpdateRecipe({fetchRecipe, recipe}) {
                         placeHolder={"Enter title..."} 
                         type="text"
                         onChange={(e) => setInputData({...inputData, title: e.target.value})}
-                        req={true}
+                        value={inputData.title}
+                        
                     />
                 </div>
                 <div>
@@ -108,6 +95,7 @@ export default function UpdateRecipe({fetchRecipe, recipe}) {
                         placeHolder={"Enter Description..."} 
                         type="text"
                         onChange={(e) => setInputData({...inputData, description: e.target.value})}
+                        value={inputData.description}
                     />
                 </div>
                 <div>
@@ -116,10 +104,11 @@ export default function UpdateRecipe({fetchRecipe, recipe}) {
                         placeHolder={"Provide instructions"} 
                         rows={4}
                         onChange={(e) => setInputData({...inputData, instruction: e.target.value})}
-                        req={true}
+                        value={inputData.instruction}
                     />
                 </div>
                 <div>
+                    {/* Preview here */}
                     <InputGroup 
                         labelName={"Upload image"} 
                         type="file"
@@ -128,19 +117,14 @@ export default function UpdateRecipe({fetchRecipe, recipe}) {
                     />
                 </div>
                 <div>
-                    <InputGroup 
-                        labelName={"Creator"} 
-                        placeHolder={"Enter creator name..."} 
-                        type="text"
-                        onChange={(e) => setInputData({...inputData, fullName: e.target.value})}
-                    />
+                   <CategoryDropdown handleCategory={handleCategoryChange}/>
                 </div>
               </div>
 
 
               {/* Modal footer */}
               <div className="flex items-center p-4 mx-5 md:p-5 border-t border-gray-200 rounded-b">
-                <Button onClick={submitRecipe} title={"Create"} className=" bg-[#FE5D26] hover:bg-[#E6B85A]" />
+                <Button title={"Create"} className=" bg-[#FE5D26] hover:bg-[#E6B85A]" />
                
               </div>
             </div>

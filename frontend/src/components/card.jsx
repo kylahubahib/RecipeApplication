@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-export default function RecipeCard({title, desc, img, name, id}) {
+export default function RecipeCard({title, desc, img, category, id}) {
 
 return (
    
@@ -10,7 +10,7 @@ return (
   <div className="p-2 flex flex-col space-y-2 min-w-0">
     <label className="font-bold text-gray-900 text-2xl">{title}</label>
     <p className="text-gray-700 text-sm truncate whitespace-nowrap overflow-hidden min-w-0"><b>Description:</b> {desc}</p>
-    <label className="text-gray-700 text-sm">Created By: {name}</label>
+    <label className="text-gray-700 text-sm">Category: {category}</label>
   </div>
 
 </Link>

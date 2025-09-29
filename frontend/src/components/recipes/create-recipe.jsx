@@ -3,6 +3,7 @@ import Button from "../button";
 import InputGroup from "../input";
 import TextAreaGroup from "../text-area";
 import { api } from "../../services/api";
+import CategoryDropdown from "../dropdown";
 
 //  "recipeId": 4,
 //         "creatorId": 1,
@@ -15,19 +16,23 @@ import { api } from "../../services/api";
 
 export default function CreateRecipe({fetchRecipe}) {
   const [open, setOpen] = useState(false);
+  const [categories, setCategories] = useState([]);
   const [inputData, setInputData] = useState({
     title: "",
     description: "",
     instruction: "",
     image: null,
-    fullName: ""
+    categoryId: null
   })
 
   function toggleModal() {
     setOpen(!open);
   }
+
+  function handleCategoryChange(id) {
+    setInputData({...inputData, categoryId : id})
+  }
   
-  // console.log(inputData);
 
   async function submitRecipe() {
     const formData = new FormData();
@@ -37,7 +42,7 @@ export default function CreateRecipe({fetchRecipe}) {
     if (inputData.image) {
       formData.append("Image", inputData.image); 
     }
-    formData.append("Name", inputData.fullName);
+    formData.append("CategoryId", inputData.categoryId);
 
     try {
         const res = await api.createRecipe(formData);
@@ -63,6 +68,8 @@ export default function CreateRecipe({fetchRecipe}) {
       document.body.style.overflow = "auto";
     };
   }, [open]);
+
+
 
   return (
     <>
@@ -127,12 +134,7 @@ export default function CreateRecipe({fetchRecipe}) {
                     />
                 </div>
                 <div>
-                    <InputGroup 
-                        labelName={"Creator"} 
-                        placeHolder={"Enter creator name..."} 
-                        type="text"
-                        onChange={(e) => setInputData({...inputData, fullName: e.target.value})}
-                    />
+                    <CategoryDropdown handleCategory={handleCategoryChange}/>
                 </div>
               </div>
 

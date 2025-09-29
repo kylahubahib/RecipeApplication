@@ -54,12 +54,12 @@ export default function Home() {
                 title={recipe.title} 
                 desc={recipe.description} 
                 img={recipe.image} 
-                name={recipe.fullName} 
+                category={recipe.categoryName} 
                 id={recipe.recipeId}
             />
             ))
         ) : (
-            <div className="mx-5">No recipe found</div>
+            <div className="col-span-full text-center text-gray-500 py-10">No recipe found</div>
         )}
         </div>
         </>

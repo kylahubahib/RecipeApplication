@@ -331,3 +331,4 @@ C:\Users\third\OneDrive\Documents\Kyla\project\fullstack\RecipeApplication\backe
 C:\Users\third\OneDrive\Documents\Kyla\project\fullstack\RecipeApplication\backend\obj\Debug\net9.0\backend.pdb
 C:\Users\third\OneDrive\Documents\Kyla\project\fullstack\RecipeApplication\backend\obj\Debug\net9.0\backend.genruntimeconfig.cache
 C:\Users\third\OneDrive\Documents\Kyla\project\fullstack\RecipeApplication\backend\obj\Debug\net9.0\ref\backend.dll
+C:\Users\TRAINEE-HUBAHIB\OneDrive - N-PAX\Documents\Training\Practice\RecipeApplication\backend\obj\Debug\net9.0\backend.sourcelink.json
