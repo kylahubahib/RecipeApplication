@@ -2,12 +2,17 @@ const BASE_URL = import.meta.env.VITE_API_URL;
 
 async function http(path, options = {}) {
   const isFormData = options.body instanceof FormData;
+  const token = localStorage.getItem("authToken");
+
+  const headers = {
+    ...(isFormData ? {} : { "Content-Type": "application/json" }),
+    ...(options.headers || {}),
+    ...(token ? { Authorization: `Bearer ${token}` } : {})
+  };
 
   const res = await fetch(`${BASE_URL}${path}`, {
     ...options,
-    headers: isFormData 
-      ? options.headers || {} // let browser set multipart boundary
-      : { "Content-Type": "application/json", ...(options.headers || {}) },
+    headers,
   });
 
   if (!res.ok) {
@@ -17,6 +22,9 @@ async function http(path, options = {}) {
 
   return res.status === 204 ? null : res.json();
 }
+
+
+
 
 export const api = {
   // RECIPE API
@@ -31,7 +39,11 @@ export const api = {
   getCategoryById: (id) => http(`/api/Category/${id}`),
   createCategory: (category) => http("/api/Category", { method: "POST", body: JSON.stringify(category) }),
   updateCategory: (id, category) => http(`/api/Category/${id}`, { method: "PUT", body: JSON.stringify(category) }),
-  deleteCategory: (id) => http(`/api/Category/${id}`,{ method: "DELETE"})
+  deleteCategory: (id) => http(`/api/Category/${id}`,{ method: "DELETE"}),
+
+  //AUTH API
+  login: (credentials) => http("/api/Auth/login", { method: "POST", body: JSON.stringify(credentials)}),
+  register: (newUser) => http("/api/Auth/register", { method: "POST", body: JSON.stringify(newUser)})
 };
 
 

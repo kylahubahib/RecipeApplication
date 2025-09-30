@@ -6,6 +6,7 @@ using backend.Application.DTOs;
 using backend.Application.Services;
 using backend.Domain.Interfaces;
 using backend.Domain.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -25,6 +26,7 @@ namespace backend.Controllers
             _logger = logger;
         }
 
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<DisplayRecipeDto>>> GetAllAsync()
         {
@@ -51,7 +53,7 @@ namespace backend.Controllers
         }
 
         [HttpPut("{id:int}")]
-        public async Task<IActionResult> UpdateAsync(RecipeDto data, int id)
+        public async Task<IActionResult> UpdateAsync(UpdateRecipeDto data, int id)
         {
             var success = await _service.Update(data, id);
             return success ? NoContent() : NotFound();

@@ -14,6 +14,7 @@ namespace backend.Application.DTOs
         public string Instruction { get; set; } = "";
         public byte[]? Image { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
+        // public int UserId { get; set; }
 
     }
 
@@ -27,6 +28,7 @@ namespace backend.Application.DTOs
         public string? Image { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public string? CategoryName { get; set; }
+        public int UserId { get; set; }
 
     }
 
@@ -39,8 +41,18 @@ namespace backend.Application.DTOs
         public string Instruction { get; set; } = "";
         public IFormFile? Image { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
-        
         public string? CategoryName { get; set; } = "";
- 
+        public int UserId { get; set; }
+
+    }
+    public class UpdateRecipeDto
+    {
+        public int RecipeId { get; set; }
+        public int? CategoryId { get; set; }
+        public string Title { get; set; } = "";
+        public string? Description { get; set; }
+        public string Instruction { get; set; } = "";
+        public IFormFile? Image { get; set; }
+        public DateTime CreatedAt { get; set; }
     }
 }

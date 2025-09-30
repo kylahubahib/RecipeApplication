@@ -9,21 +9,42 @@ using backend.Infrastructure.Context;
 namespace backend.Application.Services
 {
     
-    public class InputValidation : IValidationServices
+    public class RegisterValidation : IValidationServices<RegisterDto>
     {
-        public bool Validate()
+        private readonly AppDbContext _context;
+
+        public RegisterValidation(AppDbContext context)
         {
-            return true;
+            _context = context;
+        }
+
+        public bool Validate(RegisterDto dto)
+        {
+            // Example: Email must be unique
+            return !_context.Users.Any(u => u.Email == dto.Email);
         }
     }
 
-    public class ImageFileValidation : IValidationServices
+    public class PasswordValidation : IValidationServices<string>
     {
-        public bool Validate()
+        public bool Validate(string password)
         {
-            return true;
+            // Example: Require at least 8 chars
+            return !string.IsNullOrWhiteSpace(password) && password.Length >= 8;
         }
     }
+
+    public class ImageFileValidation : IValidationServices<IFormFile>
+    {
+        public bool Validate(IFormFile file)
+        {
+            // Example: Check file type
+            var allowedExtensions = new[] { ".jpg", ".jpeg", ".png" };
+            var extension = Path.GetExtension(file.FileName).ToLower();
+            return allowedExtensions.Contains(extension) && file.Length < 2_000_000; // max 2MB
+        }
+    }
+
 
     
 }

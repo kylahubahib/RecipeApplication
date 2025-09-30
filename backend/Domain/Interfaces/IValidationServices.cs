@@ -5,8 +5,10 @@ using System.Threading.Tasks;
 
 namespace backend.Domain.Interfaces
 {
-    public interface IValidationServices
+    
+    // "T" let your validation interface work with different input types without duplicating code
+    public interface IValidationServices<T> //generic type parameter
     {
-        bool Validate();
+        bool Validate(T input);
     }
 }

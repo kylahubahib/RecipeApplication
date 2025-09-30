@@ -7,7 +7,6 @@ import CategoryDropdown from "../dropdown";
 
 export default function UpdateRecipe({fetchRecipe, recipe}) {
   const [open, setOpen] = useState(false);
-  const [updatedImage, setUpdatedImage] = useState("");
   const [inputData, setInputData] = useState({
     title: "",
     description: "",
@@ -16,27 +15,66 @@ export default function UpdateRecipe({fetchRecipe, recipe}) {
     category: ""
   })
 
+  // console.log(recipe.image);
+
   function toggleModal() { 
     setOpen(!open);
   }
-
 
   function handleCategoryChange(id) {
     setInputData({...inputData, category : id});
     console.log(id);
   }
 
-   useEffect(() => {
-    if (recipe) {
-      setInputData({
-        title: recipe.title || "",
-        description: recipe.description || "",
-        instruction: recipe.instruction || "",
-        image: recipe.image || "",
-        category: recipe.categoryId || ""
-      });
+  function UpdateRecipe() {
+    var recipeId = recipe.recipeId;
+    var title = inputData.title ? inputData.title : recipe.title;
+    var description = inputData.description ? inputData.description : recipe.description;
+    var instruction = inputData.instruction ? inputData.instruction : recipe.instruction;
+    var image = inputData.image;
+    var categoryId = inputData.category ? inputData.category : recipe.categoryId;
+    var createdAt = recipe.createdAt;
+
+
+
+    const formData = new FormData();
+    formData.append("Title", title);
+    formData.append("Description", description);
+    formData.append("Instruction", instruction);
+    if(image) {
+      formData.append("Image", image); 
     }
-  }, [recipe]);
+    formData.append("CategoryId", categoryId);
+    formData.append("CreatedAt", createdAt);
+
+    // for (let [key, value] of formData.entries()) {
+    //   console.log(key, value);
+    // }
+
+    try {
+      const res = api.updateRecipe(recipeId, formData);
+
+      alert("Succesfully updated recipe!")
+    } catch(err) {
+      alert(err);
+    } finally {
+      cancelEdit();
+      fetchRecipe();
+    }
+
+  }
+
+  function cancelEdit() {
+    setInputData({
+      title: "",
+      description: "",
+      instruction: "",
+      image: "",
+      category: ""
+    })
+
+    setOpen(false);
+  }
   
 
   // Prevent body scroll when modal is open
@@ -86,7 +124,7 @@ export default function UpdateRecipe({fetchRecipe, recipe}) {
                         placeHolder={"Enter title..."} 
                         type="text"
                         onChange={(e) => setInputData({...inputData, title: e.target.value})}
-                        value={inputData.title}
+                        value={inputData.title ? inputData.title : recipe.title}
                         
                     />
                 </div>
@@ -96,7 +134,7 @@ export default function UpdateRecipe({fetchRecipe, recipe}) {
                         placeHolder={"Enter Description..."} 
                         type="text"
                         onChange={(e) => setInputData({...inputData, description: e.target.value})}
-                        value={inputData.description}
+                        value={inputData.description ? inputData.description : recipe.description}
                     />
                 </div>
                 <div>
@@ -105,17 +143,26 @@ export default function UpdateRecipe({fetchRecipe, recipe}) {
                         placeHolder={"Provide instructions"} 
                         rows={4}
                         onChange={(e) => setInputData({...inputData, instruction: e.target.value})}
-                        value={inputData.instruction}
+                        value={inputData.instruction ? inputData.instruction : recipe.instruction}
                     />
                 </div>
                 <div className="flex space-x-7 mt-8">
-                     {inputData.image != null && <div className="w-40 h-40">
-                        <img 
+                     <div className="w-40 h-40">
+                        {inputData.image ? (
+                           <img 
                           className="w-40 h-40 object-cover rounded-md" 
-                          src={inputData.image} 
+                          src={URL.createObjectURL(inputData.image)} 
                           alt={inputData.title} 
                         />
-                    </div>}
+                        ) : (
+                           <img 
+                          className="w-40 h-40 object-cover rounded-md" 
+                          src={recipe.image == null ? "/bg-food.png" : recipe.image} 
+                          alt={recipe.title} 
+                        />
+                        )}
+                       
+                    </div>
                     <div>
                       <InputGroup 
                         labelName={"Upload New Image"} 
@@ -126,14 +173,14 @@ export default function UpdateRecipe({fetchRecipe, recipe}) {
                     </div>
                 </div>
                 <div>
-                   <CategoryDropdown handleCategory={handleCategoryChange} selectedId={inputData.category}/>
+                   <CategoryDropdown handleCategory={handleCategoryChange} selectedId={recipe.categoryId}/>
                 </div>
               </div>
 
-
               {/* Modal footer */}
-              <div className="flex items-center p-4 mx-5 md:p-5 border-t border-gray-200 rounded-b">
-                <Button title={"Create"} className=" bg-[#FE5D26] hover:bg-[#E6B85A]" />
+              <div className="flex items-center space-x-3 p-4 mx-5 md:p-5 border-t border-gray-200 rounded-b">
+                <Button title={"Save Edit"} onClick={UpdateRecipe} className=" bg-[#FE5D26] hover:bg-[#E6B85A]"/>
+                <Button title={"Cancel"} onClick={cancelEdit} className=" bg-red-500 hover:bg-red-700]"/>
                
               </div>
             </div>

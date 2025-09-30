@@ -60,7 +60,8 @@ namespace backend.Application.Services
                     Instruction = r.Instruction,
                     Image = _convert.ConvertToString(r.Image),
                     CreatedAt = r.CreatedAt,
-                    CategoryName = r.Category != null ? r.Category.CategoryName : "Anonymous"
+                    CategoryName = r.Category != null ? r.Category.CategoryName : "Anonymous",
+                    UserId = r.UserId
                 })
             .FirstOrDefaultAsync();
         }
@@ -85,17 +86,25 @@ namespace backend.Application.Services
             return newRecipe;
         }
 
-        public async Task<bool> Update(RecipeDto dto, int id)
+        public async Task<bool> Update(UpdateRecipeDto dto, int id)
         {
+            var recipe = await _db.Recipes.FirstOrDefaultAsync(r => r.RecipeId == id);
+            if (recipe == null) return false;
 
-            var exists = await _db.Recipes.AnyAsync(t => t.RecipeId == id);
-            if (!exists) return false;
+            recipe.CategoryId = dto.CategoryId;
+            recipe.Title = dto.Title;
+            recipe.Description = dto.Description;
+            recipe.Instruction = dto.Instruction;
 
-            _db.Entry(dto).State = EntityState.Modified;
+            if (dto.Image != null) 
+            {
+                recipe.Image = _convert.ConvertToBytes(dto.Image);
+            }
+
             await _db.SaveChangesAsync();
-
             return true;
         }
+
 
         public async Task<bool> Delete(int id)
         {

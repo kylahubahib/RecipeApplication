@@ -11,6 +11,7 @@ export default function RecipeDetails({}) {
     const [error, setError] = useState("");
     const [deleting, setDeleting] = useState(false);
     const [editing, setEdit] = useState(false);
+    const loginUser = JSON.parse(localStorage.getItem("currentUser"));
     
     async function fetchRecipe() {
        try {
@@ -18,7 +19,7 @@ export default function RecipeDetails({}) {
         setRecipe(res);
        } catch (err) {
         alert(err);
-       }
+       } 
     }
 
     useEffect(() => {
@@ -61,12 +62,12 @@ return (
             <h5 className="mt-2 font-bold">Instructions:</h5>
             <p className="whitespace-pre-line">{recipe.instruction}</p>
 
-            <div className="flex flex-row space-x-3 mt-10">
-                <div><UpdateRecipe recipe={recipe}/></div>
+            {loginUser.userId == recipe.userId && <div className="flex flex-row space-x-3 mt-10">
+                <div><UpdateRecipe fetchRecipe={fetchRecipe} recipe={recipe}/></div>
                 <div>
                 <Button title={deleting ? 'Deleting' : 'Delete'} className="bg-red-600 hover:bg-red-800" onClick={deleteRecipe} />
                 </div>
-            </div>
+            </div>}
             </div>
         </div>
     </div>

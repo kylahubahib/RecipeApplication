@@ -13,7 +13,7 @@ namespace backend.Domain.Interfaces
         Task<IEnumerable<DisplayRecipeDto>> GetAllAsync();
         Task<DisplayRecipeDto?> GetRecipeAsync(int id);
         Task<Recipe> Create(CreateRecipeDto data);
-        Task<bool> Update(RecipeDto dto, int id);
+        Task<bool> Update(UpdateRecipeDto dto, int id);
         Task<bool> Delete(int id);
     }
 }

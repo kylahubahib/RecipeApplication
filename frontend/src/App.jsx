@@ -1,13 +1,28 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/home";
 import RecipeDetails from "./pages/recipe-details";
+import Login from "./pages/auth/login";
+import Register from "./pages/auth/register";
+import ProtectedRoute from "./components/routes/protected-routes";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/recipe/:id" element={<RecipeDetails />} />
+        {/* Public Routes */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+
+        {/* Authenticated Routes */}
+        <Route path="/" element={
+          <ProtectedRoute>
+            <Home />
+          </ProtectedRoute>} />
+          
+        <Route path="/recipe/:id" element={
+          <ProtectedRoute>
+            <RecipeDetails />
+          </ProtectedRoute>} />
       </Routes>
     </BrowserRouter>
   )
