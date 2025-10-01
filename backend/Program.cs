@@ -47,7 +47,10 @@ builder.Services.AddScoped<ICategoryServices, CategoryServices>();
 builder.Services.AddScoped<IConvertImageServices, ConvertImageServices>();
 builder.Services.AddScoped<IAuthServices, AuthServices>();
 builder.Services.AddScoped<ITokenServices, TokenServices>();
-builder.Services.AddScoped<IUserServices, UserServices>();
+// builder.Services.AddScoped<IUserServices, UserServices>();
+builder.Services.AddScoped<IValidationServices<RegisterDto>, RegisterValidation>();
+builder.Services.AddScoped<IValidationServices<string>, PasswordValidation>();
+builder.Services.AddScoped<IValidationServices<IFormFile>, ImageFileValidation>();
 
 
 builder.Services.AddCors(opt =>
@@ -66,7 +69,7 @@ app.UseSwaggerUI();
 app.UseHttpsRedirection();
 app.UseCors("DevCors");
 
-app.UseAuthentication(); // Must be before UseAuthorization
+app.UseAuthentication(); 
 app.UseAuthorization();
 
 app.MapControllers();

@@ -14,10 +14,11 @@ namespace backend.Domain.Models
         public byte[]? Image { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         
+        [JsonIgnore]
         [ForeignKey("CategoryId")]
         public virtual Category? Category { get; set; }
-        
 
+        [JsonIgnore]
         [ForeignKey("UserId")]
         public virtual User? User { get; set; }
 

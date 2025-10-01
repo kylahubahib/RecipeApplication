@@ -16,6 +16,8 @@ public class AuthResult
     public string Token { get; set; } = "";
     public DateTime ExpiresAt { get; set; }
     public LoginUser? User { get; set; }
+    public bool? Success;
+    public string? Message;
 }
 
 public class LoginUser

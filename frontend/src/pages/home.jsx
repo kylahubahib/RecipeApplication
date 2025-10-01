@@ -3,12 +3,13 @@ import NavigationBar from '../layout/navbar'
 import { api } from '../services/api';
 import RecipeCard from '../components/card';
 import Loading from '../components/loading';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function Home() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   async function loadRecipes() {
     setLoading(true);
@@ -18,8 +19,12 @@ export default function Home() {
       setData(res);
      
     } catch(err) {
-      setError(err.message || "Failed to load recipes");
-      console.log(err.message);
+      if (err.status === 401) {
+        alert("You automatically logged out!")
+        navigate("/login");
+      } else {
+        console.error("Error:", err.message);
+      }
     } finally {
       setTimeout(() => {
         setLoading(false);

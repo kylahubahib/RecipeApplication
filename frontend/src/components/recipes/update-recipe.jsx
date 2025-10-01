@@ -4,6 +4,7 @@ import InputGroup from "../input";
 import TextAreaGroup from "../text-area";
 import { api } from "../../services/api";
 import CategoryDropdown from "../dropdown";
+import validateFileExtension from "../../utils/fileValidator";
 
 export default function UpdateRecipe({fetchRecipe, recipe}) {
   const [open, setOpen] = useState(false);
@@ -13,9 +14,14 @@ export default function UpdateRecipe({fetchRecipe, recipe}) {
     instruction: "",
     image: "",
     category: ""
-  })
-
-  // console.log(recipe.image);
+  });
+    const [error, setError] = useState({
+    title: "",
+    category: "",
+    instruction: "",
+    imageSize: "",
+    imageType: ""
+  });
 
   function toggleModal() { 
     setOpen(!open);
@@ -27,6 +33,14 @@ export default function UpdateRecipe({fetchRecipe, recipe}) {
   }
 
   function UpdateRecipe() {
+    setError({
+      title: "",
+      category: "",
+      instruction: "",
+      imageSize: "",
+      imageType: ""
+    });
+
     var recipeId = recipe.recipeId;
     var title = inputData.title ? inputData.title : recipe.title;
     var description = inputData.description ? inputData.description : recipe.description;
@@ -34,10 +48,9 @@ export default function UpdateRecipe({fetchRecipe, recipe}) {
     var image = inputData.image;
     var categoryId = inputData.category ? inputData.category : recipe.categoryId;
     var createdAt = recipe.createdAt;
+    
 
-
-
-    const formData = new FormData();
+    const formData = new FormData(); 
     formData.append("Title", title);
     formData.append("Description", description);
     formData.append("Instruction", instruction);
@@ -46,17 +59,29 @@ export default function UpdateRecipe({fetchRecipe, recipe}) {
     }
     formData.append("CategoryId", categoryId);
     formData.append("CreatedAt", createdAt);
+    formData.append("UserId", recipe.userId);
 
     // for (let [key, value] of formData.entries()) {
     //   console.log(key, value);
     // }
 
     try {
-      const res = api.updateRecipe(recipeId, formData);
+     if (inputData.image) {
+      validateFileExtension(inputData.image);
+      }
+     const res = api.updateRecipe(recipeId, formData);
 
       alert("Succesfully updated recipe!")
     } catch(err) {
-      alert(err);
+       const errorMessages = JSON.parse(err.message);
+        setError({
+          title: errorMessages.errors.Title?.[0] || "",
+          category: errorMessages.errors.CategoryId?.[0] ? "The Category field is required." : "",
+          instruction: errorMessages.errors.Instruction?.[0] || "",
+          imageSize: errorMessages.errors.image?.[0] || "",
+          imageType: errorMessages.errors.imageType?.[0] || "",
+
+        });
     } finally {
       cancelEdit();
       fetchRecipe();
@@ -127,6 +152,7 @@ export default function UpdateRecipe({fetchRecipe, recipe}) {
                         value={inputData.title ? inputData.title : recipe.title}
                         
                     />
+                    <p className="text-red-500 text-sm">{error.title}</p>
                 </div>
                 <div>
                     <InputGroup 
@@ -145,6 +171,7 @@ export default function UpdateRecipe({fetchRecipe, recipe}) {
                         onChange={(e) => setInputData({...inputData, instruction: e.target.value})}
                         value={inputData.instruction ? inputData.instruction : recipe.instruction}
                     />
+                     <p className="text-red-500 text-sm">{error.instruction}</p>
                 </div>
                 <div className="flex space-x-7 mt-8">
                      <div className="w-40 h-40">
@@ -171,9 +198,11 @@ export default function UpdateRecipe({fetchRecipe, recipe}) {
                         accept="image/*"
                       />
                     </div>
+                     <p className="text-red-500 text-sm">{error.imageSize} {error.imageType}</p>
                 </div>
                 <div>
                    <CategoryDropdown handleCategory={handleCategoryChange} selectedId={recipe.categoryId}/>
+                    <p className="text-red-500 text-sm">{error.category}</p>
                 </div>
               </div>
 

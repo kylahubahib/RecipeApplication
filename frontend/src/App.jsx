@@ -4,6 +4,7 @@ import RecipeDetails from "./pages/recipe-details";
 import Login from "./pages/auth/login";
 import Register from "./pages/auth/register";
 import ProtectedRoute from "./components/routes/protected-routes";
+import { useEffect } from "react";
 
 function App() {
   return (

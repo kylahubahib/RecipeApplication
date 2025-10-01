@@ -16,9 +16,20 @@ async function http(path, options = {}) {
   });
 
   if (!res.ok) {
-    const text = await res.text();
-    throw new Error(`${res.status} ${res.statusText} - ${text}`);
+  const text = await res.text();
+  let message = text;
+
+  try {
+    // Try parse JSON if possible
+    const json = JSON.parse(text);
+    message = json.message || message;
+  } catch {
+    // if it's not JSON, keep raw text
   }
+
+  throw new Error(message); 
+}
+
 
   return res.status === 204 ? null : res.json();
 }

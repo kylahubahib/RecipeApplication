@@ -14,7 +14,7 @@ namespace backend.Application.DTOs
         public string Instruction { get; set; } = "";
         public byte[]? Image { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
-        // public int UserId { get; set; }
+        public int UserId { get; set; }
 
     }
 
@@ -54,5 +54,7 @@ namespace backend.Application.DTOs
         public string Instruction { get; set; } = "";
         public IFormFile? Image { get; set; }
         public DateTime CreatedAt { get; set; }
+        public int UserId { get; set; }
+
     }
 }

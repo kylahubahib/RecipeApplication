@@ -13,6 +13,7 @@ export default function Register() {
 
     async function submitRegistration(e) {
         e.preventDefault();
+        setError(false);
 
         if(password != confirmPass) {
             setError("Password doesn't match.");
@@ -25,11 +26,12 @@ export default function Register() {
           localStorage.setItem("authToken", res.token);
           localStorage.setItem("currentUser", JSON.stringify(res.user));
           alert("Successfully registered! Welcome to my recipe application")
-        } catch (err) {
-          console.log(err);
-        } finally {
           navigate('/');
-        }
+        } catch (err) {
+          console.log(err.message);
+          setError(err.message);
+        } 
+         
 
         console.log(email, " and ", password);
     }

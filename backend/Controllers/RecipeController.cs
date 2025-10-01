@@ -19,11 +19,15 @@ namespace backend.Controllers
     {
         private readonly ILogger<RecipeController> _logger;
         private readonly IRecipeServices _service;
+        private readonly IValidationServices<IFormFile> _imageValidator;
 
-        public RecipeController( ILogger<RecipeController> logger, IRecipeServices service)
+        public RecipeController(ILogger<RecipeController> logger,
+            IRecipeServices service,
+            IValidationServices<IFormFile> imageValidator)
         {
             _service = service;
             _logger = logger;
+            _imageValidator = imageValidator;
         }
 
         [Authorize]
@@ -47,7 +51,14 @@ namespace backend.Controllers
         [HttpPost]
         public async Task<ActionResult<RecipeDto>> CreateAsync(CreateRecipeDto data)
         {
-            //Add validations here
+            if (!_imageValidator.Validate(data.Image) && data.Image != null)
+                return BadRequest(new { 
+                    errors = new { 
+                        Image = new[] { "The image size exceeds the allowed limit (2MB)." } 
+                    } 
+                });
+
+
             var recipe = await _service.Create(data);
             return CreatedAtAction(nameof(GetById), new { id = recipe.RecipeId }, recipe);
         }
@@ -55,6 +66,14 @@ namespace backend.Controllers
         [HttpPut("{id:int}")]
         public async Task<IActionResult> UpdateAsync(UpdateRecipeDto data, int id)
         {
+            if (!_imageValidator.Validate(data.Image) && data.Image != null)
+                return BadRequest(new { 
+                    errors = new { 
+                        Image = new[] { "The image size exceeds the allowed limit (2MB)." } 
+                    } 
+                });
+
+
             var success = await _service.Update(data, id);
             return success ? NoContent() : NotFound();
         }

@@ -11,6 +11,7 @@ export default function Login() {
 
     async function submitLogin(e) {
         e.preventDefault();
+        setError(false);
 
         try {
           const res = await api.login({Email: email, Password: password});
@@ -20,12 +21,11 @@ export default function Login() {
           console.log(res.user)
           navigate('/');
         } catch (err) {
-          const errorJson = JSON.parse(err.message.split(" - ")[1]);
-          setError(errorJson.message); 
-        } 
+          setError(err.message); 
+        }
 
-        console.log(email, " and ", password);
-        console.log(error);
+        // console.log(email, " and ", password);
+        // console.log(error);
     }
 
 return (

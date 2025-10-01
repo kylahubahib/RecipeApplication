@@ -20,7 +20,6 @@ namespace backend.Application.Services
 
         public bool Validate(RegisterDto dto)
         {
-            // Example: Email must be unique
             return !_context.Users.Any(u => u.Email == dto.Email);
         }
     }
@@ -29,7 +28,6 @@ namespace backend.Application.Services
     {
         public bool Validate(string password)
         {
-            // Example: Require at least 8 chars
             return !string.IsNullOrWhiteSpace(password) && password.Length >= 8;
         }
     }
@@ -38,10 +36,7 @@ namespace backend.Application.Services
     {
         public bool Validate(IFormFile file)
         {
-            // Example: Check file type
-            var allowedExtensions = new[] { ".jpg", ".jpeg", ".png" };
-            var extension = Path.GetExtension(file.FileName).ToLower();
-            return allowedExtensions.Contains(extension) && file.Length < 2_000_000; // max 2MB
+            return file.Length < 2_000_000; // max 2MB
         }
     }
 

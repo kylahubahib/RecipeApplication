@@ -4,6 +4,7 @@ import InputGroup from "../input";
 import TextAreaGroup from "../text-area";
 import { api } from "../../services/api";
 import CategoryDropdown from "../dropdown";
+import validateFileExtension from "../../utils/fileValidator";
 
 //  "recipeId": 4,
 //         "creatorId": 1,
@@ -23,7 +24,14 @@ export default function CreateRecipe({fetchRecipe}) {
     instruction: "",
     image: null,
     categoryId: null
-  })
+  });
+  const [error, setError] = useState({
+    title: "",
+    category: "",
+    instruction: "",
+    imageSize: "",
+    imageType: ""
+  });
 
   function toggleModal() {
     setOpen(!open);
@@ -35,6 +43,15 @@ export default function CreateRecipe({fetchRecipe}) {
   
 
   async function submitRecipe() {
+    setError({
+      title: "",
+      category: "",
+      instruction: "",
+      imageSize: "",
+      imageType: ""
+    });
+    const currentUser =  JSON.parse(localStorage.getItem("currentUser"));
+
     const formData = new FormData();
     formData.append("Title", inputData.title);
     formData.append("Description", inputData.description ?? "");
@@ -43,16 +60,33 @@ export default function CreateRecipe({fetchRecipe}) {
       formData.append("Image", inputData.image); 
     }
     formData.append("CategoryId", inputData.categoryId);
+    formData.append("UserId", currentUser.userId)
 
     try {
+        if (inputData.image) {
+        validateFileExtension(inputData.image);
+        }
         const res = await api.createRecipe(formData);
+
         if(res) {
           setOpen(false);
           alert("Successfully added recipe!");
           fetchRecipe();
         }
+        // for (let [key, value] of formData.entries()) {
+        // console.log(key, value);
+    // }
     } catch(err) {
-        alert("An unexpected error occurred");
+      const errorMessages = JSON.parse(err.message);
+      setError({
+        title: errorMessages.errors.Title?.[0] || "",
+        category: errorMessages.errors.CategoryId?.[0] ? "The Category field is required." : "",
+        instruction: errorMessages.errors.Instruction?.[0] || "",
+        imageSize: errorMessages.errors.image?.[0] || "",
+        imageType: errorMessages.errors.imageType?.[0] || "",
+
+      });
+      
     }
   }
 
@@ -105,8 +139,8 @@ export default function CreateRecipe({fetchRecipe}) {
                         placeHolder={"Enter title..."} 
                         type="text"
                         onChange={(e) => setInputData({...inputData, title: e.target.value})}
-                        req={true}
                     />
+                     <p className="text-red-500 text-sm">{error.title}</p>
                 </div>
                 <div>
                     <InputGroup 
@@ -115,6 +149,7 @@ export default function CreateRecipe({fetchRecipe}) {
                         type="text"
                         onChange={(e) => setInputData({...inputData, description: e.target.value})}
                     />
+                    
                 </div>
                 <div>
                     <TextAreaGroup 
@@ -122,8 +157,8 @@ export default function CreateRecipe({fetchRecipe}) {
                         placeHolder={"Provide instructions"} 
                         rows={4}
                         onChange={(e) => setInputData({...inputData, instruction: e.target.value})}
-                        req={true}
                     />
+                    <p className="text-red-500 text-sm">{error.instruction}</p>
                 </div>
                 <div>
                     <InputGroup 
@@ -132,10 +167,13 @@ export default function CreateRecipe({fetchRecipe}) {
                         onChange={(e) => setInputData({...inputData, image: e.target.files[0]})}
                         accept="image/*"
                     />
+                    <p className="text-red-500 text-sm">{error.imageSize} {error.imageType}</p>
                 </div>
                 <div>
                     <CategoryDropdown handleCategory={handleCategoryChange}/>
+                     <p className="text-red-500 text-sm">{error.category}</p>
                 </div>
+               
               </div>
 
 

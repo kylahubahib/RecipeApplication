@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using backend.Application.DTOs;
 using backend.Domain.Interfaces;
@@ -78,7 +79,10 @@ namespace backend.Application.Services
                 Instruction = data.Instruction,
                 Image = img,
                 CreatedAt = data.CreatedAt,
+                UserId = data.UserId
             };
+
+          _logger.LogInformation(JsonSerializer.Serialize(newRecipe));
             
             await _db.Recipes.AddAsync(newRecipe);
             await _db.SaveChangesAsync();
@@ -95,8 +99,9 @@ namespace backend.Application.Services
             recipe.Title = dto.Title;
             recipe.Description = dto.Description;
             recipe.Instruction = dto.Instruction;
+            recipe.UserId = dto.UserId;
 
-            if (dto.Image != null) 
+            if (dto.Image != null)
             {
                 recipe.Image = _convert.ConvertToBytes(dto.Image);
             }

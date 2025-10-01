@@ -44,6 +44,7 @@ namespace backend.Application.Services
 
             return new AuthResult
             {
+                Success = true,
                 Token = tokenString,
                 ExpiresAt = token.ValidTo,
                 User = new LoginUser
