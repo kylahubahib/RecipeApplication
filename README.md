@@ -23,6 +23,7 @@ The Recipe Application is a full-stack web application that allows users to crea
 🛠️ TECH STACK
 
 Backend:
+
 • ASP.NET Core Web API
 
 • Entity Framework Core (EF Core)
@@ -36,6 +37,7 @@ Backend:
 • SOLID principles applied in backend design
 
 Frontend:
+
 • ReactJS
 
 • Vite
