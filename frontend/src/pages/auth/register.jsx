@@ -26,7 +26,7 @@ export default function Register() {
           localStorage.setItem("authToken", res.token);
           localStorage.setItem("currentUser", JSON.stringify(res.user));
           alert("Successfully registered! Welcome to my recipe application")
-          navigate('/');
+          navigate('/home');
         } catch (err) {
           console.log(err.message);
           setError(err.message);

@@ -20,7 +20,6 @@ async function http(path, options = {}) {
   let message = text;
 
   try {
-    // Try parse JSON if possible
     const json = JSON.parse(text);
     message = json.message || message;
   } catch {

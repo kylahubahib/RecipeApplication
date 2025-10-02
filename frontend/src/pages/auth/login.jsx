@@ -19,7 +19,7 @@ export default function Login() {
           localStorage.setItem("authToken", res.token);
           localStorage.setItem("currentUser", JSON.stringify(res.user));
           console.log(res.user)
-          navigate('/');
+          navigate('/home');
         } catch (err) {
           setError(err.message); 
         }

@@ -38,7 +38,7 @@ export default function RecipeDetails({}) {
         } finally {
             setTimeout(() => {
                 setDeleting(false);
-                navigate('/')
+                navigate('/home')
             }, 800)
         
         }

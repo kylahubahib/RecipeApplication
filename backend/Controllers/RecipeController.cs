@@ -15,6 +15,7 @@ namespace backend.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class RecipeController : ControllerBase
     {
         private readonly ILogger<RecipeController> _logger;
@@ -30,7 +31,6 @@ namespace backend.Controllers
             _imageValidator = imageValidator;
         }
 
-        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<DisplayRecipeDto>>> GetAllAsync()
         {
@@ -52,10 +52,12 @@ namespace backend.Controllers
         public async Task<ActionResult<RecipeDto>> CreateAsync(CreateRecipeDto data)
         {
             if (!_imageValidator.Validate(data.Image) && data.Image != null)
-                return BadRequest(new { 
-                    errors = new { 
-                        Image = new[] { "The image size exceeds the allowed limit (2MB)." } 
-                    } 
+                return BadRequest(new
+                {
+                    errors = new
+                    {
+                        Image = new[] { "The image size exceeds the allowed limit (2MB)." }
+                    }
                 });
 
 
@@ -67,10 +69,12 @@ namespace backend.Controllers
         public async Task<IActionResult> UpdateAsync(UpdateRecipeDto data, int id)
         {
             if (!_imageValidator.Validate(data.Image) && data.Image != null)
-                return BadRequest(new { 
-                    errors = new { 
-                        Image = new[] { "The image size exceeds the allowed limit (2MB)." } 
-                    } 
+                return BadRequest(new
+                {
+                    errors = new
+                    {
+                        Image = new[] { "The image size exceeds the allowed limit (2MB)." }
+                    }
                 });
 
 

@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Home from "./pages/home";
 import RecipeDetails from "./pages/recipe-details";
 import Login from "./pages/auth/login";
@@ -15,7 +15,7 @@ function App() {
         <Route path="/register" element={<Register />} />
 
         {/* Authenticated Routes */}
-        <Route path="/" element={
+        <Route path="/home" element={
           <ProtectedRoute>
             <Home />
           </ProtectedRoute>} />
@@ -24,6 +24,11 @@ function App() {
           <ProtectedRoute>
             <RecipeDetails />
           </ProtectedRoute>} />
+
+        
+        {/* Default Route → Redirect to Login */}
+        <Route path="/" element={<Navigate to="/login" replace />} />
+        <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     </BrowserRouter>
   )

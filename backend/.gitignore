@@ -1,0 +1,68 @@
+############################
+# Build results
+############################
+bin/
+obj/
+[Bb]uild/
+[Ll]og/
+out/
+publish/
+wwwroot/
+
+############################
+# User-specific files
+############################
+*.user
+*.rsuser
+*.suo
+*.userosscache
+*.sln.docstates
+
+############################
+# Visual Studio
+############################
+.vs/
+*.dbmdl
+*.bak
+*.mdf
+*.ldf
+
+############################
+# NuGet
+############################
+*.nupkg
+*.snupkg
+packages/
+!packages/build/
+!packages/repositories.config
+
+############################
+# JetBrains Rider / IDE
+############################
+.idea/
+*.iml
+
+############################
+# Config & Secrets
+############################
+# Environment variables
+.env
+secrets.json
+
+############################
+# Logs & Dumps
+############################
+*.log
+logs/
+*.dmp
+
+############################
+# Others
+############################
+# OS generated
+.DS_Store
+Thumbs.db
+
+# ReSharper
+_ReSharper*/
+*.DotSettings.user

@@ -13,7 +13,7 @@ namespace backend.Application.Services
 {
     public class TokenServices : ITokenServices
     {
-         private readonly IConfiguration _config;
+        private readonly IConfiguration _config;
 
         public TokenServices(IConfiguration config)
         {
