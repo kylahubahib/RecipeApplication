@@ -16,7 +16,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// For JWT Tokens, authorization and authentication
+// Registering JWT authentication system 
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -38,7 +38,7 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-// 3. Add Authorization
+// Add Authorization
 builder.Services.AddAuthorization();
 
 // Whenever a class asks for IRecipeServices, provide an instance of RecipeServices.
@@ -48,9 +48,9 @@ builder.Services.AddScoped<IConvertImageServices, ConvertImageServices>();
 builder.Services.AddScoped<IAuthServices, AuthServices>();
 builder.Services.AddScoped<ITokenServices, TokenServices>();
 // builder.Services.AddScoped<IUserServices, UserServices>();
-builder.Services.AddScoped<IValidationServices<RegisterDto>, RegisterValidation>();
-builder.Services.AddScoped<IValidationServices<string>, PasswordValidation>();
-builder.Services.AddScoped<IValidationServices<IFormFile>, ImageFileValidation>();
+builder.Services.AddScoped<ValidationServices<RegisterDto>, RegisterValidation>();
+builder.Services.AddScoped<ValidationServices<string>, PasswordValidation>();
+builder.Services.AddScoped<ValidationServices<IFormFile>, ImageFileValidation>();
 
 
 builder.Services.AddCors(opt =>

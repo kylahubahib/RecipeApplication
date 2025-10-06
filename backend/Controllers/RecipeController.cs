@@ -20,11 +20,11 @@ namespace backend.Controllers
     {
         private readonly ILogger<RecipeController> _logger;
         private readonly IRecipeServices _service;
-        private readonly IValidationServices<IFormFile> _imageValidator;
+        private readonly ValidationServices<IFormFile> _imageValidator;
 
         public RecipeController(ILogger<RecipeController> logger,
             IRecipeServices service,
-            IValidationServices<IFormFile> imageValidator)
+            ValidationServices<IFormFile> imageValidator)
         {
             _service = service;
             _logger = logger;
@@ -68,7 +68,7 @@ namespace backend.Controllers
         [HttpPut("{id:int}")]
         public async Task<IActionResult> UpdateAsync(UpdateRecipeDto data, int id)
         {
-            if (!_imageValidator.Validate(data.Image) && data.Image != null)
+            if (data.Image != null && !_imageValidator.Validate(data.Image))
                 return BadRequest(new
                 {
                     errors = new

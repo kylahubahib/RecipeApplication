@@ -59,14 +59,14 @@ export default function DisplayCategory({data, fetchCategories}) {
 return (
 <>
 
-<div class="relative overflow-x-auto">
-    <table class="w-full text-sm text-left rtl:text-right text-gray-500">
-        <thead class="text-xs text-gray-700 uppercase bg-gray-50 ">
+<div className="relative overflow-x-auto">
+    <table className="w-full text-sm text-left rtl:text-right text-gray-500">
+        <thead className="text-xs text-gray-700 uppercase bg-gray-50 ">
             <tr>
-                <th scope="col" class="px-6 py-3">
+                <th scope="col" className="px-6 py-3">
                     Category Name
                 </th>
-                <th scope="col" class="px-6 py-3">
+                <th scope="col" className="px-6 py-3">
                     Actions
                 </th>
             </tr>
@@ -74,10 +74,10 @@ return (
         <tbody>
             { data && data.length > 0 ? (
                 data.map((c) => (
-                <tr key={c.categoryId} class="bg-white border-b border-gray-200">
+                <tr key={c.categoryId} className="bg-white border-b border-gray-200">
                     {editId != c.categoryId ? 
-                        <td class="px-6 py-4">{c.categoryName}</td> :
-                        <td class="px-6 py-4">
+                        <td className="px-6 py-4">{c.categoryName}</td> :
+                        <td className="px-6 py-4">
                            <InputGroup
                                 placeHolder={"Enter category name..."}
                                 type="text"
@@ -86,7 +86,7 @@ return (
                             />
                         </td>
                     }
-                    <td class="px-6 py-4 space-x-3">
+                    <td className="px-6 py-4 space-x-3">
                       {editId == c.categoryId ? (
                         <>
                             <Button 

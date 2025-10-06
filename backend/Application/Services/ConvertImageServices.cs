@@ -10,12 +10,17 @@ namespace backend.Application.Services
     {
         public byte[]? ConvertToBytes(IFormFile? imageFile)
         {
+            //Check if file exist
             if (imageFile == null || imageFile.Length == 0)
                 return null;
 
+            //Create a memory stream to store the file in memory.
             using (var memoryStream = new MemoryStream())
             {
+                //Copy the uploaded file into the memory stream.
                 imageFile.CopyTo(memoryStream);
+
+                //Convert the stream to a byte[] and return it.
                 return memoryStream.ToArray();
             }
         }

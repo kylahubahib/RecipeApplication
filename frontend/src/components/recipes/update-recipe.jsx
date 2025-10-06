@@ -48,8 +48,12 @@ export default function UpdateRecipe({fetchRecipe, recipe}) {
     var image = inputData.image;
     var categoryId = inputData.category ? inputData.category : recipe.categoryId;
     var createdAt = recipe.createdAt;
-    
 
+    console.log(image);
+     if(image) {
+      validateFileExtension(image);
+      }
+    
     const formData = new FormData(); 
     formData.append("Title", title);
     formData.append("Description", description);
@@ -66,9 +70,7 @@ export default function UpdateRecipe({fetchRecipe, recipe}) {
     // }
 
     try {
-     if (inputData.image) {
-      validateFileExtension(inputData.image);
-      }
+    
      const res = api.updateRecipe(recipeId, formData);
 
       alert("Succesfully updated recipe!")

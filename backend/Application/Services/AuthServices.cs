@@ -21,8 +21,6 @@ public class AuthServices : IAuthServices
     
     public async Task<AuthResult> RegisterAsync(RegisterDto dto)
         {
-            // if (await _context.Users.AnyAsync(u => u.Email == dto.Email))
-            //     throw new Exception("Email already exists.");
 
             var user = new User
             {
@@ -40,8 +38,9 @@ public class AuthServices : IAuthServices
     public async Task<AuthResult> LoginAsync(LoginDto dto)
     {
         var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == dto.Email);
-        if (user == null || !BCrypt.Net.BCrypt.Verify(dto.Password, user.Password))
-            throw new Exception("Invalid credentials.");
+        
+        if (user == null || !BCrypt.Net.BCrypt.Verify(dto.Password, user.Password)) //Check password
+                throw new Exception("Invalid credentials.");
 
         return _tokenService.GenerateToken(user);
     }

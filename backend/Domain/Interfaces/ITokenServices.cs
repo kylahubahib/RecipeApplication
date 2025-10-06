@@ -9,7 +9,6 @@ namespace backend.Domain.Interfaces
     public interface ITokenServices
     {
         AuthResult GenerateToken(User user);
-
-        
+    
     }
 }

@@ -26,7 +26,9 @@ async function http(path, options = {}) {
     // if it's not JSON, keep raw text
   }
 
-  throw new Error(message); 
+  const error = new Error(message);
+  error.status = res.status;
+  throw error;
 }
 
 

@@ -19,8 +19,8 @@ export default function Home() {
       setData(res);
      
     } catch(err) {
+      // console.log("Logging out: ", err.response);
       if (err.status === 401) {
-        alert("You automatically logged out!")
         navigate("/login");
       } else {
         console.error("Error:", err.message);

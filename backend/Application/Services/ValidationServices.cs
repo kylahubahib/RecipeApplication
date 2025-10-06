@@ -3,13 +3,18 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
 using System.Threading.Tasks;
-using backend.Domain.Interfaces;
 using backend.Infrastructure.Context;
 
 namespace backend.Application.Services
 {
+
+    //base class
+    public abstract class ValidationServices<T> //generic type parameter
+    {
+        public abstract bool Validate(T input);
+    }
     
-    public class RegisterValidation : IValidationServices<RegisterDto>
+    public class RegisterValidation : ValidationServices<RegisterDto>
     {
         private readonly AppDbContext _context;
 
@@ -18,28 +23,28 @@ namespace backend.Application.Services
             _context = context;
         }
 
-        public bool Validate(RegisterDto dto)
+        public override bool Validate(RegisterDto dto)
         {
             return !_context.Users.Any(u => u.Email == dto.Email);
         }
     }
 
-    public class PasswordValidation : IValidationServices<string>
+    public class PasswordValidation : ValidationServices<string>
     {
-        public bool Validate(string password)
+        public override bool Validate(string password)
         {
             return !string.IsNullOrWhiteSpace(password) && password.Length >= 8;
         }
     }
 
-    public class ImageFileValidation : IValidationServices<IFormFile>
+    public class ImageFileValidation : ValidationServices<IFormFile>
     {
-        public bool Validate(IFormFile file)
+        public override bool Validate(IFormFile file)
         {
             return file.Length < 2_000_000; // max 2MB
         }
     }
 
-
+    
     
 }

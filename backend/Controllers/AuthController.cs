@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using backend.Application.Services;
 using backend.Domain.Interfaces;
 using backend.Domain.Models; 
 using Microsoft.AspNetCore.Mvc;
@@ -10,13 +11,13 @@ namespace backend.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IAuthServices _authService;
-        private readonly IValidationServices<RegisterDto> _registerValidator;
-        private readonly IValidationServices<string> _passwordValidator;
+        private readonly ValidationServices<RegisterDto> _registerValidator;
+        private readonly ValidationServices<string> _passwordValidator;
 
 
         public AuthController(IAuthServices authService,
-            IValidationServices<RegisterDto> registerValidator,
-            IValidationServices<string> passwordValidator
+            ValidationServices<RegisterDto> registerValidator,
+            ValidationServices<string> passwordValidator
         )
         {
             _authService = authService;
