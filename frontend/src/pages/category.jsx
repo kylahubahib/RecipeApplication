@@ -8,15 +8,17 @@ import CreateCategory from "../components/categories/create-categories";
 export default function CategoryModal({}) {
   const [categories, setCategories] = useState([]);
   const [open, setOpen] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
 
   async function fetchCategories() {
+    console.log("fetching data")
     try {
         const res = await api.getCategories();
-        if(res) {
-            setCategories(res);
-        }
+        setCategories(res.data);
     } catch (err) {
-        alert(err);
+        alert(err.response.data.message);
+    } finally {
+      console.log(categories);
     }
   }
 
@@ -59,16 +61,10 @@ export default function CategoryModal({}) {
 
               {/* Modal body */}
               <div className="p-4 md:p-5 space-y-4 mx-5">
-                <CreateCategory fetchCategories={fetchCategories}/>
-                <DisplayCategory fetchCategories={fetchCategories} data={categories} />
+                <CreateCategory fetchCategories={fetchCategories} editing={isEditing}/>
+                <DisplayCategory categories={categories} fetchCategories={fetchCategories} setIsEditing={setIsEditing}/>
 
               </div>
-
-
-              {/* Modal footer */}
-              {/* <div className="flex items-center p-4 mx-5 md:p-5 border-t border-gray-200 rounded-b">
-               
-              </div> */}
             </div>
           </div>
         </div>

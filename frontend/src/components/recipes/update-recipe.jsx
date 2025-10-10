@@ -15,7 +15,7 @@ export default function UpdateRecipe({fetchRecipe, recipe}) {
     image: "",
     category: ""
   });
-    const [error, setError] = useState({
+  const [error, setError] = useState({
     title: "",
     category: "",
     instruction: "",
@@ -75,15 +75,21 @@ export default function UpdateRecipe({fetchRecipe, recipe}) {
 
       alert("Succesfully updated recipe!")
     } catch(err) {
-       const errorMessages = JSON.parse(err.message);
-        setError({
-          title: errorMessages.errors.Title?.[0] || "",
-          category: errorMessages.errors.CategoryId?.[0] ? "The Category field is required." : "",
-          instruction: errorMessages.errors.Instruction?.[0] || "",
-          imageSize: errorMessages.errors.image?.[0] || "",
-          imageType: errorMessages.errors.imageType?.[0] || "",
-
-        });
+      if(err.response){
+        if(err.response.data.errors) {
+          const errorMessages = err.response.data
+          setError({
+            title: errorMessages ? errorMessages.errors.Title?.[0] : "",
+            category: errorMessages.errors.CategoryId?.[0] ? "The Category field is required." : "",
+            instruction: errorMessages.errors.Instruction?.[0] || ""
+          });
+        } else {
+          setError({ imageSize: err.response.data.message || ""});
+        }
+      } else {
+        const errorMessages = JSON.parse(err.message);
+        setError({ imageType: errorMessages.errors.imageType?.[0] || ""})
+      }
     } finally {
       cancelEdit();
       fetchRecipe();

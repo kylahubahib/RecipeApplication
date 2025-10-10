@@ -24,7 +24,7 @@ services:
     image: backend
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__DefaultConnection=Server=db,1433;Database=RecipeDB;User Id=sa;Password=Password12345!;TrustServerCertificate=True;
+      - ConnectionStrings__DefaultConnection=Server=host.docker.internal,1433;Database=RecipeDB;User Id=sa;Password=Password12345!;TrustServerCertificate=True;
     ports:
       - "5146:5146"
     volumes:

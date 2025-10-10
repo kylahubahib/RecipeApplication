@@ -5,6 +5,7 @@ import Login from "./pages/auth/login";
 import Register from "./pages/auth/register";
 import ProtectedRoute from "./components/routes/protected-routes";
 import { useEffect } from "react";
+import Profile from "./pages/profile";
 
 function App() {
   return (
@@ -18,12 +19,20 @@ function App() {
         <Route path="/home" element={
           <ProtectedRoute>
             <Home />
-          </ProtectedRoute>} />
+          </ProtectedRoute>} 
+        />
           
         <Route path="/recipe/:id" element={
           <ProtectedRoute>
             <RecipeDetails />
-          </ProtectedRoute>} />
+          </ProtectedRoute>} 
+        />
+
+        <Route path="/profile" element={
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>} 
+        />
 
         
         {/* Default Route → Redirect to Login */}

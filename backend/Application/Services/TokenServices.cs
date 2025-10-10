@@ -5,7 +5,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using backend.Domain.Interfaces;
+using backend.Application.Interfaces;
 using backend.Domain.Models;
 using Microsoft.IdentityModel.Tokens;
 
@@ -22,6 +22,7 @@ namespace backend.Application.Services
 
         public AuthResult GenerateToken(User user)
         {
+            //represent user identity and permissions
             var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.UserId.ToString()),
@@ -32,6 +33,7 @@ namespace backend.Application.Services
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]!));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
+            //build your JWT
             var token = new JwtSecurityToken(
                 issuer: _config["Jwt:Issuer"],
                 audience: _config["Jwt:Audience"],
@@ -40,6 +42,7 @@ namespace backend.Application.Services
                 signingCredentials: creds
             );
 
+            //convert token to string
             var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
 
             return new AuthResult

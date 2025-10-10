@@ -7,9 +7,10 @@ const [item, setItem] = useState([]);
 async function fetchCategories() {
     try {
         const res = await api.getCategories();
-        setItem(res);
+        setItem(res.data);
     } catch (err) {
-        alert(err);
+        const error = err.response.data;
+        alert(error);
     }
 }
 

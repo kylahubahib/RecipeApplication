@@ -4,7 +4,7 @@ import Button from "../button";
 import CreateCategory from "./create-categories";
 import InputGroup from "../input";
 
-export default function DisplayCategory({data, fetchCategories}) {
+export default function DisplayCategory({categories, fetchCategories, setIsEditing}) {
     const [processing , setProcessing] = useState(false);
     const [editing, setEditing] = useState(false);
     const [editCategoryName, setEditCategoryName] = useState("");
@@ -13,12 +13,14 @@ export default function DisplayCategory({data, fetchCategories}) {
     function toggleEdit(c) {
         setEditId(c.categoryId);
         setEditing(true);
+        setIsEditing(true);
         setEditCategoryName(c.categoryName);
     }
  
     function closeEdit() {
         setEditId(null);
         setEditing(false);
+        setIsEditing(false);
         setEditCategoryName("");
     }
 
@@ -29,28 +31,26 @@ export default function DisplayCategory({data, fetchCategories}) {
                 CategoryId: editId, 
                 categoryName: editCategoryName
             });
-
+            
             alert("Successfully updated category");
+             if (fetchCategories) fetchCategories(); 
 
         } catch (err) {
-            alert(err);
+            alert(err.response.data);
         } finally {
             setProcessing(false);
             closeEdit();
-            fetchCategories();
         }
     }
 
     async function deleteCategory(id) {
         setProcessing(true);
         try {
-            const res = api.deleteCategory(id);
-            if(res) {
-                alert("Succesfully deleted category");
-                fetchCategories();
-            }
+            const res = await api.deleteCategory(id);
+            alert("Succesfully deleted category");
+            if (fetchCategories) fetchCategories(); 
         } catch (err) {
-            alert(err);
+            alert(err.response.data);
         } finally {
             setProcessing(false);
         }
@@ -72,8 +72,8 @@ return (
             </tr>
         </thead>
         <tbody>
-            { data && data.length > 0 ? (
-                data.map((c) => (
+            { categories && categories.length > 0 ? (
+                categories.map((c) => (
                 <tr key={c.categoryId} className="bg-white border-b border-gray-200">
                     {editId != c.categoryId ? 
                         <td className="px-6 py-4">{c.categoryName}</td> :
@@ -83,6 +83,7 @@ return (
                                 type="text"
                                 value={editCategoryName}
                                 onChange={(e) => setEditCategoryName(e.target.value)}
+                                required
                             />
                         </td>
                     }

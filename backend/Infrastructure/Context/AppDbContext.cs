@@ -14,7 +14,6 @@ namespace backend.Infrastructure.Context
         //Mapping models to the database table
         public DbSet<Recipe> Recipes => Set<Recipe>();
         public DbSet<Category> Categories => Set<Category>();
-
         public DbSet<User> Users => Set<User>();
     }
 }

@@ -3,7 +3,7 @@ import Button from "../button";
 import InputGroup from "../input";
 import { api } from "../../services/api";
 
-export default function CreateCategory({ fetchCategories }) {
+export default function CreateCategory({ fetchCategories, editing }) {
   const [categoryName, setCategoryName] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -15,8 +15,6 @@ export default function CreateCategory({ fetchCategories }) {
       return;
     }
 
-   
-
     try {
       setLoading(true);
       const res = await api.createCategory({categoryName : categoryName});
@@ -26,7 +24,7 @@ export default function CreateCategory({ fetchCategories }) {
         if (fetchCategories) fetchCategories(); 
       }
     } catch (err) {
-      console.log(err);
+      console.log(err.response.data);
     } finally {
       setLoading(false);
     }
@@ -39,13 +37,14 @@ export default function CreateCategory({ fetchCategories }) {
         type="text"
         value={categoryName}
         onChange={(e) => setCategoryName(e.target.value)}
-        req={true}
+        required
+        disabled={editing}
       />
       <Button
         type="submit"
         title={loading ? "Adding..." : "Add"}
         className="bg-[#F2C078] hover:bg-[#E6B85A]"
-        disabled={loading}
+        disabled={loading || editing}
       />
     </form>
   );

@@ -16,19 +16,19 @@ export default function Home() {
     console.log("Start fetching...");
     try {
       const res = await api.getRecipes()
-      setData(res);
+      setData(res.data);
      
     } catch(err) {
       // console.log("Logging out: ", err.response);
-      if (err.status === 401) {
+      if (err.response.status == 401) {
         navigate("/login");
       } else {
-        console.error("Error:", err.message);
+        console.error("Error:", err.response);
       }
     } finally {
       setTimeout(() => {
         setLoading(false);
-      }, 1000)
+      }, 500)
     }
   }
 

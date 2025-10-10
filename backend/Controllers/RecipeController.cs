@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using backend.Application.DTOs;
 using backend.Application.Services;
-using backend.Domain.Interfaces;
+using backend.Application.Interfaces;
 using backend.Domain.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.Features;
@@ -51,14 +51,8 @@ namespace backend.Controllers
         [HttpPost]
         public async Task<ActionResult<RecipeDto>> CreateAsync(CreateRecipeDto data)
         {
-            if (!_imageValidator.Validate(data.Image) && data.Image != null)
-                return BadRequest(new
-                {
-                    errors = new
-                    {
-                        Image = new[] { "The image size exceeds the allowed limit (2MB)." }
-                    }
-                });
+            if (data.Image != null && !_imageValidator.Validate(data.Image) )
+                return BadRequest(new { message = "The image size exceeds the allowed limit (2MB)." });
 
 
             var recipe = await _service.Create(data);
@@ -69,13 +63,7 @@ namespace backend.Controllers
         public async Task<IActionResult> UpdateAsync(UpdateRecipeDto data, int id)
         {
             if (data.Image != null && !_imageValidator.Validate(data.Image))
-                return BadRequest(new
-                {
-                    errors = new
-                    {
-                        Image = new[] { "The image size exceeds the allowed limit (2MB)." }
-                    }
-                });
+               return BadRequest(new { message = "The image size exceeds the allowed limit (2MB)." });
 
 
             var success = await _service.Update(data, id);

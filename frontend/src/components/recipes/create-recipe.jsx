@@ -16,6 +16,7 @@ import validateFileExtension from "../../utils/fileValidator";
 //         "fullName": "Sharon Cuneta"
 
 export default function CreateRecipe({fetchRecipe}) {
+  const [processing, setProcessing] = useState(false);
   const [open, setOpen] = useState(false);
   const [categories, setCategories] = useState([]);
   const [inputData, setInputData] = useState({
@@ -40,7 +41,17 @@ export default function CreateRecipe({fetchRecipe}) {
   function handleCategoryChange(id) {
     setInputData({...inputData, categoryId : id});
   }
-  
+
+  function removeInputs() {
+    setInputData({
+    title: "",
+    description: "",
+    instruction: "",
+    image: null,
+    categoryId: null
+  });
+  }
+
 
   async function submitRecipe() {
     setError({
@@ -50,6 +61,7 @@ export default function CreateRecipe({fetchRecipe}) {
       imageSize: "",
       imageType: ""
     });
+    setProcessing(true);
     const currentUser =  JSON.parse(localStorage.getItem("currentUser"));
 
     const formData = new FormData();
@@ -68,25 +80,33 @@ export default function CreateRecipe({fetchRecipe}) {
         }
         const res = await api.createRecipe(formData);
 
-        if(res) {
+        if(res.data) {
           setOpen(false);
+          removeInputs();
           alert("Successfully added recipe!");
           fetchRecipe();
         }
-        // for (let [key, value] of formData.entries()) {
-        // console.log(key, value);
-    // }
+       
     } catch(err) {
-      const errorMessages = JSON.parse(err.message);
-      setError({
-        title: errorMessages.errors.Title?.[0] || "",
-        category: errorMessages.errors.CategoryId?.[0] ? "The Category field is required." : "",
-        instruction: errorMessages.errors.Instruction?.[0] || "",
-        imageSize: errorMessages.errors.image?.[0] || "",
-        imageType: errorMessages.errors.imageType?.[0] || "",
-
-      });
-      
+      if(err.response){
+        if(err.response.data.errors) {
+          const errorMessages = err.response.data
+          setError({
+            title: errorMessages ? errorMessages.errors.Title?.[0] : "",
+            category: errorMessages.errors.CategoryId?.[0] ? "The Category field is required." : "",
+            instruction: errorMessages.errors.Instruction?.[0] || ""
+          });
+        } else {
+          setError({ imageSize: err.response.data.message || ""});
+        }
+      } else {
+        const errorMessages = JSON.parse(err.message);
+        setError({ imageType: errorMessages.errors.imageType?.[0] || ""})
+      }
+    } finally {
+      setTimeout(() => {
+        setProcessing(false);
+      }, 500)
     }
   }
 
@@ -140,7 +160,7 @@ export default function CreateRecipe({fetchRecipe}) {
                         type="text"
                         onChange={(e) => setInputData({...inputData, title: e.target.value})}
                     />
-                     <p className="text-red-500 text-sm">{error.title}</p>
+                     {!processing && <p className="text-red-500 text-sm">{error.title}</p>}
                 </div>
                 <div>
                     <InputGroup 
@@ -158,7 +178,7 @@ export default function CreateRecipe({fetchRecipe}) {
                         rows={4}
                         onChange={(e) => setInputData({...inputData, instruction: e.target.value})}
                     />
-                    <p className="text-red-500 text-sm">{error.instruction}</p>
+                    {!processing && <p className="text-red-500 text-sm">{error.instruction}</p>}
                 </div>
                 <div>
                     <InputGroup 
@@ -167,11 +187,11 @@ export default function CreateRecipe({fetchRecipe}) {
                         onChange={(e) => setInputData({...inputData, image: e.target.files[0]})}
                         accept="image/*"
                     />
-                    <p className="text-red-500 text-sm">{error.imageSize} {error.imageType}</p>
+                    {!processing && <p className="text-red-500 text-sm">{error.imageSize} {error.imageType}</p>}
                 </div>
                 <div>
                     <CategoryDropdown handleCategory={handleCategoryChange}/>
-                     <p className="text-red-500 text-sm">{error.category}</p>
+                    {!processing &&  <p className="text-red-500 text-sm">{error.category}</p> }
                 </div>
                
               </div>
@@ -179,7 +199,7 @@ export default function CreateRecipe({fetchRecipe}) {
 
               {/* Modal footer */}
               <div className="flex items-center p-4 mx-5 md:p-5 border-t border-gray-200 rounded-b">
-                <Button onClick={submitRecipe} title={"Create"} className=" bg-[#FE5D26] hover:bg-[#E6B85A]" />
+                <Button onClick={submitRecipe} title={processing ? "Creating..." : "Create"} disabled={processing} className=" bg-[#FE5D26] hover:bg-[#E6B85A]" />
                
               </div>
             </div>

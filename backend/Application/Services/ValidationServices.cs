@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using backend.Infrastructure.Context;
 
@@ -13,7 +14,7 @@ namespace backend.Application.Services
     {
         public abstract bool Validate(T input);
     }
-    
+
     public class RegisterValidation : ValidationServices<RegisterDto>
     {
         private readonly AppDbContext _context;
@@ -45,6 +46,14 @@ namespace backend.Application.Services
         }
     }
 
-    
+    public class EmailFormatValidation : ValidationServices<string>
+    {
+        public override bool Validate(string email)
+        {
+            var pattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
+            return Regex.IsMatch(email, pattern);
+        }
+    }
+
     
 }

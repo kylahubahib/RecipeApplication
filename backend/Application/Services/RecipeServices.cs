@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using backend.Application.DTOs;
-using backend.Domain.Interfaces;
+using backend.Application.Interfaces;
 using backend.Domain.Models;
 using backend.Infrastructure.Context;
 using Microsoft.AspNetCore.Mvc; 
@@ -33,6 +33,7 @@ namespace backend.Application.Services
 
             return await _db.Recipes
                 .Include(r => r.Category)
+                .OrderBy(r => r.Title)
                 .Select(r => new DisplayRecipeDto
                 {
                     RecipeId = r.RecipeId,

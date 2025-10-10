@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using backend.Application.DTOs;
 using backend.Application.Services;
-using backend.Domain.Interfaces;
+using backend.Application.Interfaces;
 using backend.Domain.Models;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;

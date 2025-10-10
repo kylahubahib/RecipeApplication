@@ -6,7 +6,7 @@ using backend.Application.DTOs;
 using backend.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace backend.Domain.Interfaces
+namespace backend.Application.Interfaces
 {
     public interface IRecipeServices
     {

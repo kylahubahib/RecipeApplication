@@ -1,20 +1,54 @@
 // Program.cs
 using System.Text;
 using backend.Application.Services;
-using backend.Domain.Interfaces;
+using backend.Application.Interfaces;
 using backend.Infrastructure.Context;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// builder.Services.AddDbContext<AppDbContext>(options =>
+//     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("LocalConnection")));
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+// builder.Services.AddSwaggerGen();
+// Let us authenticate to access API in Swagger
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new() { Title = "RecipeAPI", Version = "v1" });
+
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "Enter 'Bearer' [space] and then your token.\n\nExample: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6..."
+    });
+
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
+});
+
 
 // Registering JWT authentication system 
 builder.Services.AddAuthentication(options =>
@@ -51,6 +85,8 @@ builder.Services.AddScoped<ITokenServices, TokenServices>();
 builder.Services.AddScoped<ValidationServices<RegisterDto>, RegisterValidation>();
 builder.Services.AddScoped<ValidationServices<string>, PasswordValidation>();
 builder.Services.AddScoped<ValidationServices<IFormFile>, ImageFileValidation>();
+builder.Services.AddScoped<IProfileServices, ProfileServices>();
+builder.Services.AddScoped<EmailFormatValidation>();
 
 
 builder.Services.AddCors(opt =>
@@ -72,9 +108,6 @@ var app = builder.Build();
 
 app.UseSwagger();
 app.UseSwaggerUI();
-
-
-
 
 app.UseHttpsRedirection();
 app.UseCors("DevCors");

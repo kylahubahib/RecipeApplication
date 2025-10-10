@@ -1,6 +1,6 @@
 using System;
 using System.Threading.Tasks;
-using backend.Domain.Interfaces;
+using backend.Application.Interfaces;
 using backend.Infrastructure.Context;
 using backend.Domain.Models;
 using Microsoft.EntityFrameworkCore;

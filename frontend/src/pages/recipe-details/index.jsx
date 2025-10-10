@@ -16,9 +16,14 @@ export default function RecipeDetails({}) {
     async function fetchRecipe() {
        try {
         const res = await api.getRecipeById(id);
-        setRecipe(res);
+        setRecipe(res.data);
        } catch (err) {
-        alert(err);
+         const error = err.response.data;
+         if (error.status === 401) {
+            navigate("/login");
+        } else {
+            console.error("Error:", error.message);
+        }
        } 
     }
 
